@@ -9,64 +9,82 @@ void get_walltime(double *wct) {
 }
 
 
-int main() {
-unsigned int i,j;
-double *a,*b;
+int main(int argc, char** argv)
+{
+int i,j,k;
+float *a,*b,*c;
+float *fa,*fb,*fc;
+float sum;
 double ts,te,aps;
 
 
-  a = (double *)malloc(N*N*sizeof(double)); 
+  a = (float *)malloc(N*N*sizeof(float)); 
   if (a==NULL) {
-    printf("alloc error!\n");
-    exit(1);
+    printf("error!\n");
+    exit(-1);
   }
 
-  b = (double *)malloc(N*N*sizeof(double)); 
+  b = (float *)malloc(N*N*sizeof(float)); 
   if (b==NULL) {
-    printf("alloc error!\n");
+    printf("error!\n");
     free(a);
-    exit(1);
+    exit(-1);
+  }
+  c = (float *)malloc(N*N*sizeof(float)); 
+  if (c==NULL) {
+    printf("error!\n");
+    free(a);
+    free(b);
+    exit(-1);
   }
 
-  // warmup
+
   for (i=0;i<N*N;i++) {
-     a[i] = 2.0*i;
-     b[i] = -i;
+     a[i] = 2.0;
+     b[i] = 3.0;
+     c[i] = 20.0;
   } 
 
   // get starting time (double, seconds) 
   get_walltime(&ts);
   
-  // transpose workload
-  for (i=0;i<N;i++) {
+  fc=c;
+  for (k=0;k<N;k++) {
+    fb=b;
     for (j=0;j<N;j++) {
-      a[j*N+i] = b[i*N+j];
+      fa=a+k*N;
+      sum=0.0;
+      for(i=0; i<N; i++){
+        sum = sum + (*pa) * (*pb);
+                pa++;
+                pb++;
+      }
+      *fc = sum;
+            fc++;
     }
   }
 
   // get ending time
   get_walltime(&te);
 
-  // check operation
-  int done = 0;
-  for (i=0;i<N && done!=1;i++) {
-    for (j=0;j<N;j++) {
-      if (a[j*N+i] != b[i*N+j]) {
-        printf("Error!\n");
-        done = 1;
-        break;
-      }
+ 
+ for (int i=0; i<N*N; i++) {
+        if (arrc[i] != 6 * N) {
+            printf("Error!\n");
+            break;
+        }
     }
-  }
 
   
-  // compute avg array element accesses /sec (total NROWSxNCOLSx(1load+1store) element accesses)
-  aps = (2.0*N*N)/((te-ts)*1e6);
+ 
+  aps = (N*N)/((te-ts)*1e6);
   
-  printf("avg array element Maccesses/sec = %f\n",aps);
+  printf("%f\n",aps);
 
   free(b);
   free(a);
+  free(c);
+ 
 
   return 0;
 }
