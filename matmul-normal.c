@@ -2,10 +2,6 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-// compile with:  gcc -Wall -O2 transpose.c -o transpose -DN=4000
-
-// NOTE: try also with -DN=4096 to see what happens!
-
 void get_walltime(double *wct) {
   struct timeval tp;
   gettimeofday(&tp,NULL);
